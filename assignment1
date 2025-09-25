@@ -1,78 +1,64 @@
-import array
+stack = []
 
-# Integers: Quantities of tools checked out
-tool_quantities = [8, 15, 6, 10, 12, 9, 11]  # Example quantities for different tools
+# 1. UR pushes ["AssignmentX", "AssignmentY", "AssignmentZ"]. Undo one. Which is top?
+stack = ["AssignmentX", "AssignmentY", "AssignmentZ"]
+stack.pop()  # Undo one
+print("Stack Q1 Top:", stack[-1])  # Output: AssignmentY
 
-total_checked_out = sum(tool_quantities)
-average_checked_out = total_checked_out / len(tool_quantities)
-min_checked_out = min(tool_quantities)
-max_checked_out = max(tool_quantities)
+# 2. Irembo, push ["StepX", "StepY", "StepZ"]. Undo all. Which remains?
+stack = ["StepX", "StepY", "StepZ"]
+stack.pop()
+stack.pop()
+stack.pop()
+print("Stack Q2 Remains:", stack)  # Output: []
 
-# Strings: Formatted report using f-strings
-report = (
-    f"Workshop Tool Checkout Report\n"
-    f"Total Tools Checked Out: {total_checked_out}\n"
-    f"Average Checked Out per Tool: {average_checked_out:.2f}\n"
-    f"Minimum Checked Out: {min_checked_out}\n"
-    f"Maximum Checked Out: {max_checked_out}\n"
-)
+# 3. Challenge: Push ["A", "B", "C"], pop all, push "D". Which is top?
+stack = []
+stack.extend(["A", "B", "C"])
+stack.pop()
+stack.pop()
+stack.pop()
+stack.append("D")
+print("Stack Q3 Top:", stack[-1])  # Output: D
 
-print(report)
+# 4. Reflection: Reversing input order with stack
+inputs = ["first", "second", "third"]
+stack = []
+for item in inputs:
+    stack.append(item)
+reversed_inputs = []
+while stack:
+    reversed_inputs.append(stack.pop())
+print("Stack Q4 Reversed:", reversed_inputs)  # Output: ['third', 'second', 'first']
 
-# Booleans: Threshold condition and compound condition
-threshold = 10
-# Compound condition: average exceeds threshold and max is above threshold
-if average_checked_out > threshold and max_checked_out > threshold:
-    print("Status: Above Standard")
-else:
-    print("Status: Below Standard")
+# Queue examples (FIFO)
+from collections import deque
 
-# Lists: Maintain, modify, and display a list of tool names
-tool_names = ["Hammer", "Screwdriver", "Wrench", "Drill", "Saw", "Pliers", "Chisel"]
+# 1. CHUK, 10 patients queue. After 7 served, who is front?
+queue = deque(range(1, 11))  # patients 1 to 10
+for _ in range(7):
+    queue.popleft()
+print("Queue Q1 Front:", queue[0])  # Output: 8
 
-print("\nTools before modification:", tool_names)
+# 2. Nyabugogo, 8 buses queue. Who departs first?
+queue = deque(["Bus" + str(i) for i in range(1, 9)])  # Bus1 to Bus8
+first_depart = queue.popleft()
+print("Queue Q2 First Depart:", first_depart)  # Output: Bus1
 
-# Add a new tool
-tool_names.append("Tape Measure")
+# 3. Challenge: Queue vs stack for distributing voter cards
+# Queue is correct (FIFO)
+voter_queue = deque(["voter1", "voter2", "voter3"])
+distributed_order = []
+while voter_queue:
+    distributed_order.append(voter_queue.popleft())
+print("Queue Q3 Distributed Order:", distributed_order)  # Output: ['voter1', 'voter2', 'voter3']
 
-# Remove a tool whose name starts with 'C'
-tool_names = [tool for tool in tool_names if not tool.startswith('C')]
-
-# Sort and display the list
-tool_names.sort()
-print("Tools after modification and sorting:", tool_names)
-
-# Arrays: Store fixed-size subset and compare sum
-subset_array = array.array('i', tool_quantities[:5])  # First five quantities
-
-array_sum = sum(subset_array)
-list_sum = sum(tool_quantities[:5])
-
-print(f"\nSum of array subset: {array_sum}")
-print(f"Sum of list subset: {list_sum}")
-print("Array and list sums are equal?" , array_sum == list_sum)
-
-# Dictionaries: List of records
-tool_records = [
-    {"id": 1, "name": "Hammer", "value": 8},
-    {"id": 2, "name": "Screwdriver", "value": 15},
-    {"id": 3, "name": "Wrench", "value": 6},
-    {"id": 4, "name": "Drill", "value": 10},
-    {"id": 5, "name": "Saw", "value": 12},
-]
-
-# Update record for 'Drill'
-for record in tool_records:
-    if record["name"] == "Drill":
-        record["value"] = 13  # Updated value
-
-# Delete record for 'Wrench'
-tool_records = [record for record in tool_records if record["name"] != "Wrench"]
-
-# Compute total 'value' across all records
-total_value = sum(record["value"] for record in tool_records)
-
-print("\nTool Records after update and delete:")
-for record in tool_records:
-    print(record)
-print(f"Total 'value' across all records: {total_value}")
+# 4. Reflection: Why FIFO promotes trust in elections
+# Demonstrate fairness
+arrival_order = ["Alice", "Bob", "Carol"]
+queue = deque(arrival_order)
+served_order = []
+while queue:
+    served_order.append(queue.popleft())
+print("Queue Q4 Served Order:", served_order)
+# Output: ['Alice', 'Bob', 'Carol'] (same as arrival, showing fairness)
